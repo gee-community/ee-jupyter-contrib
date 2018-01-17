@@ -14,6 +14,6 @@ Have an idea for content additions? Join the Gitter chat channel for this reposi
 Here is an example of using [JupyterLab](https://github.com/jupyterlab/jupyterlab) IDE to display an
 Earth Engine image asset.
 
-![JupyterLab example](images/JupyterLab Example.png)
+![JupyterLab example](images/JupyterLab_Example.png)
 
 The script shown in the screenshot is available in `examples/Getting Started/Display Static Map.ipynb`
