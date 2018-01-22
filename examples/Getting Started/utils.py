@@ -2,10 +2,15 @@ import urllib, io, os
 import matplotlib
 import matplotlib.pyplot as plt
 
-# Utility functions used to retrieve and cache images locally, ensures that thumbnails are shown in notebooks
+# Utility functions used to retrieve and cache images locally, ensures 
+# that thumbnails are shown in notebooks
 
 def get_path(image, region, dimensions):
-    return image.getThumbURL({'region' : region.getInfo(), 'format': 'png', 'dimensions': dimensions})
+    return image.getThumbURL({
+        'region' : region.getInfo(), 
+        'format': 'png', 
+        'dimensions': dimensions
+    })
 
 def retrieve(image, path_out, region, dimensions):
     path = get_path(image, region, dimensions)
@@ -23,3 +28,4 @@ def show(image, path_out, region, dimensions=256):
         plt.imshow(plt.imread(path_out))
     else:
         display(Image(url=get_path(image, region, dimensions)))
+        
