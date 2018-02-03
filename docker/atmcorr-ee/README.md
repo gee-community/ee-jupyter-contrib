@@ -38,3 +38,10 @@ jupyter-notebook sentinel2_atmospheric_correction.ipynb --ip='*' --port=8888 --a
 
 this will print out a URL that you can use in your web browser to run the code.
 
+perfect.
+
+# Result
+
+If all went well then you should be able to see a before and after set of images similar to this one
+
+![](https://media.githubusercontent.com/media/gee-community/ee-jupyter-contrib/atmcorr-ee/docker/atmcorr-ee/images/before_and_after.png)
