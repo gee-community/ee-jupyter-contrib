@@ -11,7 +11,7 @@ directory, and running the `docker build` command:
 docker build . -t atmcorr-ee
 ```
 
-The `-t` parameter assigns the tag/name `jupyter-scipy-ee` to the image.
+The `-t` parameter assigns the tag/name `atmcorr-ee` to the image.
 
 # Running the Image
 
