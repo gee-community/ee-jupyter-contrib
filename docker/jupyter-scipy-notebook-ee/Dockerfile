@@ -5,7 +5,7 @@ LABEL maintainer="Tyler Erickson <tylere@google.com>"
 USER root
 
 # Upgrade JupyterLab
-RUN conda install jupyterlab==0.31.10
+RUN conda install jupyterlab==0.31.12
 
 # Install bqplot.
 #   https://github.com/bloomberg/bqplot
@@ -16,9 +16,21 @@ RUN pip install bqplot==0.10.5 \
 
 # Install ipyleaflet.
 #   https://github.com/ellisonbg/ipyleaflet
-RUN pip install ipyleaflet==0.7.1 \
+RUN pip install ipyleaflet==0.7.3 \
   && jupyter nbextension enable --py --sys-prefix ipyleaflet \
   && jupyter labextension install jupyter-leaflet
+
+# Install Altair.
+#   https://github.com/altair-viz/jupyter_vega
+RUN pip install altair==2.0.0rc1 \
+  && pip install --upgrade notebook \
+  && jupyter labextension install @jupyterlab/vega3-extension
+
+# Install sample Vega datasets.
+RUN pip install vega_datasets
+
+# Install Palettable (color maps)
+RUN pip install palettable
 
 # Install the Earth Engine Python API.
 #   https://github.com/google/earthengine-api
