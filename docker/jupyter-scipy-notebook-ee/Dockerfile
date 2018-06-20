@@ -1,61 +1,61 @@
-FROM jupyter/scipy-notebook:92fe05d1e7e5
+FROM jupyter/scipy-notebook:59904dd7776a
+LABEL base-image="jupyter/scipy-notebook:59904dd7776a 6/6/2018"
 
 LABEL maintainer="Tyler Erickson <tylere@google.com>"
 
 USER root
 
-# Upgrade JupyterLab
-RUN conda install jupyterlab==0.31.12
+RUN conda install -c conda-forge \
+  ipywidgets \
+  altair \
+  vega_datasets
+
+# Install nbgitpuller (Notebook Git Puller).
+# https://github.com/data-8/nbgitpuller
+RUN pip install git+https://github.com/data-8/nbgitpuller \
+  && jupyter serverextension enable --py nbgitpuller --sys-prefix
+
+# Install the JupyterLab Sidecar.
+# https://github.com/jupyter-widgets/jupyterlab-sidecar
+RUN pip install sidecar
+
+# Install ipyleaflet (Leaflet-based interactiving mapping widget).
+# https://github.com/jupyter-widgets/ipyleaflet
+ARG IPYLEAFLET_VERSION=0.8.1
+RUN pip install ipyleaflet==$IPYLEAFLET_VERSION \
+  && jupyter nbextension enable --py --sys-prefix ipyleaflet \
+  && jupyter labextension install --no-build jupyter-leaflet@0.8.1
 
 # Install bqplot.
-#   https://github.com/bloomberg/bqplot
-RUN pip install bqplot==0.10.5 \
+# https://github.com/bloomberg/bqplot
+ARG BQPLOT_VERSION=0.10.1
+RUN pip install bqplot==$BQPLOT_VERSION \
   && jupyter nbextension install bqplot --py --symlink --sys-prefix \
   && jupyter nbextension enable --py --sys-prefix bqplot \
-  && jupyter labextension install bqplot
+  && jupyter labextension install --no-build bqplot
 
-# Install ipyleaflet.
-#   https://github.com/ellisonbg/ipyleaflet
-RUN pip install ipyleaflet==0.7.3 \
-  && jupyter nbextension enable --py --sys-prefix ipyleaflet \
-  && jupyter labextension install jupyter-leaflet
+# Install nbdime (Notebook Diff & Merge tool).
+# https://github.com/jupyter/nbdime
+RUN pip install nbdime 
 
-# Install Altair.
-#   https://github.com/altair-viz/jupyter_vega
-RUN pip install altair==2.0.0rc1 \
-  && pip install --upgrade notebook \
-  && jupyter labextension install @jupyterlab/vega3-extension
+# Install the Table of Contents extension.
+RUN jupyter labextension install  --no-build jupyterlab-toc
 
-# Install sample Vega datasets.
-RUN pip install vega_datasets
+# Build all the JupyterLab extensions.
+RUN jupyter lab build
 
-# Install Palettable (color maps)
-RUN pip install palettable
+# Install ipythonblocks (colored grids) and Palettable (color maps)
+RUN pip install ipythonblocks \
+  && pip install palettable
 
-# Install the Earth Engine Python API.
-#   https://github.com/google/earthengine-api
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-             build-essential \
-             libssl-dev \
-             libffi-dev \
-  && pip install cryptography \
-  && pip install earthengine-api \
-  && apt-get purge -y build-essential \
-             libssl-dev \
-             libffi-dev \
-             dpkg-dev \
-             fakeroot \
-             libfakeroot:amd64 \
-  && apt-get autoremove -y \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+# Install Tensorflow. (https://www.tensorflow.org/)
+RUN pip install tensorflow
+
+# Install the Earth Engine Python API. (https://github.com/google/earthengine-api)
+RUN conda install -c conda-forge earthengine-api
+
+# Install libraries for working with Google tools.
+RUN pip install PyDrive \
+  && pip install --upgrade google-cloud
 
 USER $NB_USER
-
-# Make sure contents are in HOME and owned by the non-root user, which is required by Binder.
-# http://mybinder.readthedocs.io/en/latest/dockerfile.html#preparing-your-dockerfile
-COPY . ${HOME}
-USER root
-RUN chown -R ${NB_UID} ${HOME}
-USER ${NB_USER}
