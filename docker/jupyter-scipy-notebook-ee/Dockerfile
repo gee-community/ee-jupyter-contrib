@@ -1,61 +1,100 @@
-FROM jupyter/scipy-notebook:92fe05d1e7e5
+FROM jupyter/scipy-notebook:03b897d05f16
+LABEL base-image="jupyter/scipy-notebook:03b897d05f16 6/13/2018"
 
 LABEL maintainer="Tyler Erickson <tylere@google.com>"
 
 USER root
 
-# Upgrade JupyterLab
-RUN conda install jupyterlab==0.31.12
+# ipyleaflet - Leaflet-based interactiving mapping widget
+#     docs: https://ipyleaflet.readthedocs.io
+#   source: https://github.com/jupyter-widgets/ipyleaflet
+#     pkgs: conda search -c conda-forge ipyleaflet
+ARG IPYLEAFLET_VERSION=0.8.4
 
-# Install bqplot.
-#   https://github.com/bloomberg/bqplot
-RUN pip install bqplot==0.10.5 \
-  && jupyter nbextension install bqplot --py --symlink --sys-prefix \
-  && jupyter nbextension enable --py --sys-prefix bqplot \
-  && jupyter labextension install bqplot
+# ipywidgets - Interactive Widgets for the Jupyter Notebook
+#     docs: https://ipywidgets.readthedocs.io
+#   source: https://github.com/jupyter-widgets/ipywidgets
+#     pkgs: conda search -c conda-forge ipywidgets
+ARG IPYWIDGETS_VERSION=7.2.1
 
-# Install ipyleaflet.
-#   https://github.com/ellisonbg/ipyleaflet
-RUN pip install ipyleaflet==0.7.3 \
-  && jupyter nbextension enable --py --sys-prefix ipyleaflet \
-  && jupyter labextension install jupyter-leaflet
+# Altair - Declarative visualization in Python
+#     docs: https://altair-viz.github.io
+#   source: https://github.com/altair-viz/altair
+#     pkgs: conda search -c conda-forge altair
+ARG ALTAIR_VERSION=2.1.0
 
-# Install Altair.
-#   https://github.com/altair-viz/jupyter_vega
-RUN pip install altair==2.0.0rc1 \
-  && pip install --upgrade notebook \
-  && jupyter labextension install @jupyterlab/vega3-extension
+# Vega Datasets - Collection of datasets used in Vega and Vega-Lite examples
+#     docs: http://vega.github.io/vega-datasets
+#   source: https://github.com/vega/vega-datasets
+#     pkgs: source: https://github.com/vega/vega-datasets
+ARG VEGA_DATASETS_VERSION=0.5.0
 
-# Install sample Vega datasets.
-RUN pip install vega_datasets
+# bqplot - Grammar of Graphics-based interactive plotting framework for the Jupyter notebook
+#     docs: https://bqplot.readthedocs.io
+#   source: https://github.com/bloomberg/bqplot
+#     pkgs: conda search -c conda-forge bqplot
+ARG BQPLOT_VERSION=0.10.5
 
-# Install Palettable (color maps)
-RUN pip install palettable
+# nbdime - Notebook Diff & Merge tool
+#     docs: https://nbdime.readthedocs.io
+#   source: https://github.com/jupyter/nbdime
+#     pkgs: conda search -c conda-forge nbdime
+ARG NBDIME_VERSION=1.0.1
 
-# Install the Earth Engine Python API.
-#   https://github.com/google/earthengine-api
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-             build-essential \
-             libssl-dev \
-             libffi-dev \
-  && pip install cryptography \
-  && pip install earthengine-api \
-  && apt-get purge -y build-essential \
-             libssl-dev \
-             libffi-dev \
-             dpkg-dev \
-             fakeroot \
-             libfakeroot:amd64 \
-  && apt-get autoremove -y \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+# Palettable - color maps
+#     docs: https://jiffyclub.github.io/palettable
+#   source: https://github.com/jiffyclub/palettable
+#     pkgs: conda search -c conda-forge palettable
+ARG PALETTABLE_VERSION=3.1.1
+
+# TensorFlow - Computation using data flow graphs for scalable machine learning
+#     home: https://www.tensorflow.org
+#     docs: https://www.tensorflow.org/api_docs
+#   source: https://github.com/tensorflow/tensorflow
+#     pkgs: conda search -c conda-forge tensorflow
+ARG TENSORFLOW_VERSION=1.8.0
+
+# Earth Engine Python API 
+#     home: https://earthengine.google.com
+#     docs: https://developers.google.com/earth-engine
+#   source: https://github.com/google/earthengine-api
+#     pkgs: conda search -c conda-forge earthengine-api
+ARG EARTHENGINE_API_VERSION=0.1.141
+
+RUN conda install -c conda-forge \
+  ipywidgets=$IPYWIDGETS_VERSION \
+  ipyleaflet=$IPYLEAFLET_VERSION \
+  altair=$ALTAIR_VERSION \
+  vega_datasets=$VEGA_DATASETS_VERSION \
+  bqplot=$BQPLOT_VERSION \
+  nbdime=$NBDIME_VERSION \
+  palettable=$PALETTABLE_VERSION \
+  tensorflow=$TENSORFLOW_VERSION \
+  earthengine-api=$EARTHENGINE_API_VERSION
+
+# Enable JupyterLab extensions.
+RUN jupyter labextension install --no-build \
+  jupyter-leaflet \
+  bqplot \
+  jupyterlab-toc
+
+# Install nbgitpuller (Notebook Git Puller).
+# https://github.com/data-8/nbgitpuller
+RUN pip install git+https://github.com/data-8/nbgitpuller \
+  && jupyter serverextension enable --py nbgitpuller --sys-prefix
+
+# Install the JupyterLab Sidecar.
+# https://github.com/jupyter-widgets/jupyterlab-sidecar
+RUN pip install sidecar
+
+# Build all the JupyterLab extensions.
+RUN jupyter lab build
+
+# Install ipythonblocks (colored grids)
+RUN pip install ipythonblocks 
+
+# Install libraries for working with Google tools.
+RUN pip install PyDrive \
+  && pip install --upgrade google-cloud
 
 USER $NB_USER
-
-# Make sure contents are in HOME and owned by the non-root user, which is required by Binder.
-# http://mybinder.readthedocs.io/en/latest/dockerfile.html#preparing-your-dockerfile
-COPY . ${HOME}
-USER root
-RUN chown -R ${NB_UID} ${HOME}
-USER ${NB_USER}
