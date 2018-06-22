@@ -13,7 +13,7 @@ The Docker image can be built by opening up a terminal, navigating to this
 directory, and running the `docker build` command:
 
 ```
-docker build . -t jupyter-scipy-ee
+docker build . -t jupyter-scipy-notebook-ee
 ```
 
 The `-t` parameter assigns the tag/name `jupyter-scipy-ee` to the image.
@@ -24,7 +24,7 @@ To create a Docker container and start up JupyterLab, execute the following
 command:
 
 ```
-docker run -it --rm -p 8888:8888 -v "$PWD:/home/jovyan/mount" jupyter-scipy-ee start.sh jupyter lab
+docker run -it --rm -p 8888:8888 --hostname localhost -e JUPYTER_LAB_ENABLE=yes -v "$PWD:/home/jovyan/mount" jupyter-scipy-notebook-ee start.sh jupyter lab
 ```
 
 This command will launch the JupyterLab UI.
