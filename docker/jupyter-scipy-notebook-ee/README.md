@@ -16,7 +16,7 @@ directory, and running the `docker build` command:
 docker build . -t jupyter-scipy-notebook-ee
 ```
 
-The `-t` parameter assigns the tag/name `jupyter-scipy-ee` to the image.
+The `-t` parameter assigns the tag/name `jupyter-scipy-notebook-ee` to the image.
 
 # Running the Image
 
