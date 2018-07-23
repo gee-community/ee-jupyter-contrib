@@ -29,7 +29,7 @@ RUN conda update -y conda                       && \
     conda install -y py6s
 
 RUN conda install -c anaconda pip               && \
-    pip install earthengine-api                 
+    pip install earthengine-api oauth2client
     
 RUN conda install -y jupyter
 
