@@ -38,7 +38,10 @@ jupyter-notebook sentinel2_atmospheric_correction.ipynb --ip='*' --port=8888 --a
 
 this will print out a URL that you can use in your web browser to run the code.
 
-perfect.
+If the URL is *http://(something_in_parentheses)* then you will need to change the parentheses and its contents for *localhost*. A valid URL should look something like..
+
+http://localhost:8888/?token=...
+
 
 # Result
 
