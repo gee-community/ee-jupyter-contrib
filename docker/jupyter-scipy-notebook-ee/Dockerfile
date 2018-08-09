@@ -9,11 +9,11 @@ LABEL maintainer="Tyler Erickson <tylere@google.com>"
 #     pkgs: conda search -c conda-forge ipyleaflet
 ARG IPYLEAFLET_VERSION=0.9.0
 
-# ipywidgets - Interactive Widgets for the Jupyter Notebook
-#     docs: https://ipywidgets.readthedocs.io
-#   source: https://github.com/jupyter-widgets/ipywidgets
-#     pkgs: conda search -c conda-forge ipywidgets
-#ARG IPYWIDGETS_VERSION=7.2.1
+# ipyvolume - 3d plotting in the Jupyter notebook
+#     docs: https://ipyvolume.readthedocs.io/
+#   source: https://github.com/maartenbreddels/ipyvolume
+#     pkgs: conda search -c conda-forge ipyvolume
+ARG IPYVOLUME_VERSION=0.4.5
 
 # Altair - Declarative visualization in Python
 #     docs: https://altair-viz.github.io
@@ -75,7 +75,7 @@ ARG GOOGLE_API_PYTHON_VERSION=1.6.7
 
 #### Other packages
 #
-# jupyterlab-toc - Table of Contents extension for JupyterLab
+# jupyterlab/toc - Table of Contents extension for JupyterLab
 #     source: https://github.com/ian-r-rose/jupyterlab-toc
 #
 # nbgitpuller - Notebook Git Puller
@@ -93,6 +93,7 @@ RUN conda install --quiet --yes \
         earthengine-api=${EARTHENGINE_API_VERSION} \
         google-api-python-client=${GOOGLE_API_PYTHON_VERSION} \
         ipyleaflet=${IPYLEAFLET_VERSION} \
+        ipyvolume=${IPYVOLUME_VERSION} \
         nbdime=${NBDIME_VERSION} \
         palettable=${PALETTABLE_VERSION} \
         pydrive=${PYDRIVE_VERSION} \
@@ -104,13 +105,17 @@ RUN conda install --quiet --yes \
     # JupyterLab Extensions
     pip install sidecar && \
     jupyter labextension install --no-build jupyter-leaflet@0.9.0 && \
+    jupyter labextension install --no-build ipyvolume@0.4.6 && \
+    jupyter labextension install --no-build jupyter-threejs@1.1.0 && \
     jupyter labextension install --no-build @jupyter-widgets/jupyterlab-manager@0.36.1 && \
     jupyter labextension install --no-build bqplot && \
     jupyter labextension install --no-build @jupyterlab/toc && \
     pip install git+https://github.com/data-8/nbgitpuller \
       && jupyter serverextension enable --py nbgitpuller --sys-prefix && \
     pip install ipythonblocks && \
+    export NODE_OPTIONS=--max-old-space-size=16000 && \
     jupyter lab build && \
+    # Clean up
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging && \
     rm -rf /home/$NB_USER/.cache/yarn && \
