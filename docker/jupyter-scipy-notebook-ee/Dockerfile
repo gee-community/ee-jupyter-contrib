@@ -1,5 +1,5 @@
-FROM jupyter/scipy-notebook:5811dcb711ba
-LABEL base-image="jupyter/scipy-notebook:5811dcb711ba 6/23/2018"
+FROM jupyter/scipy-notebook:177037d09156
+LABEL base-image="jupyter/scipy-notebook:177037d09156 8/6/2018"
 
 LABEL maintainer="Tyler Erickson <tylere@google.com>"
 
@@ -24,20 +24,20 @@ ARG ALTAIR_VERSION=2.1.0
 # Vega Datasets - Collection of datasets used in Vega and Vega-Lite examples
 #     docs: http://vega.github.io/vega-datasets
 #   source: https://github.com/vega/vega-datasets
-#     pkgs: source: https://github.com/vega/vega-datasets
+#     pkgs: conda search -c conda-forge vega_datasets
 ARG VEGA_DATASETS_VERSION=0.5.0
 
 # bqplot - Grammar of Graphics-based interactive plotting framework for the Jupyter notebook
 #     docs: https://bqplot.readthedocs.io
 #   source: https://github.com/bloomberg/bqplot
 #     pkgs: conda search -c conda-forge bqplot
-ARG BQPLOT_VERSION=0.10.5
+ARG BQPLOT_VERSION=0.11.0
 
 # nbdime - Notebook Diff & Merge tool
 #     docs: https://nbdime.readthedocs.io
 #   source: https://github.com/jupyter/nbdime
 #     pkgs: conda search -c conda-forge nbdime
-ARG NBDIME_VERSION=1.0.1
+ARG NBDIME_VERSION=1.0.2
 
 # Palettable - color maps
 #     docs: https://jiffyclub.github.io/palettable
@@ -64,7 +64,7 @@ ARG TENSORFLOW_VERSION=1.8.0
 #     docs: https://developers.google.com/earth-engine
 #   source: https://github.com/google/earthengine-api
 #     pkgs: conda search -c conda-forge earthengine-api
-ARG EARTHENGINE_API_VERSION=0.1.143
+ARG EARTHENGINE_API_VERSION=0.1.145
 
 # Google API Python Client 
 #     home: http://google.github.io/google-api-python-client/
@@ -88,25 +88,25 @@ ARG GOOGLE_API_PYTHON_VERSION=1.6.7
 #    home: http://www.ipythonblocks.org/
 
 RUN conda install --quiet --yes \
-        ipyleaflet=${IPYLEAFLET_VERSION} \
         altair=${ALTAIR_VERSION} \
-        vega_datasets=${VEGA_DATASETS_VERSION} \
         bqplot=${BQPLOT_VERSION} \
+        earthengine-api=${EARTHENGINE_API_VERSION} \
+        google-api-python-client=${GOOGLE_API_PYTHON_VERSION} \
+        ipyleaflet=${IPYLEAFLET_VERSION} \
         nbdime=${NBDIME_VERSION} \
         palettable=${PALETTABLE_VERSION} \
         pydrive=${PYDRIVE_VERSION} \
         tensorflow=${TENSORFLOW_VERSION} \
-        earthengine-api=${EARTHENGINE_API_VERSION} \
-        google-api-python-client=${GOOGLE_API_PYTHON_VERSION} \
+        vega_datasets=${VEGA_DATASETS_VERSION} \
       && \
     conda clean -tipsy && \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # JupyterLab Extensions
     pip install sidecar && \
     jupyter labextension install --no-build jupyter-leaflet@0.9.0 && \
-    jupyter labextension install --no-build @jupyter-widgets/jupyterlab-manager@0.35 && \
+    jupyter labextension install --no-build @jupyter-widgets/jupyterlab-manager@0.36.1 && \
     jupyter labextension install --no-build bqplot && \
-    jupyter labextension install --no-build jupyterlab-toc && \
+    jupyter labextension install --no-build @jupyterlab/toc && \
     pip install git+https://github.com/data-8/nbgitpuller \
       && jupyter serverextension enable --py nbgitpuller --sys-prefix && \
     pip install ipythonblocks && \
