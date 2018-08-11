@@ -83,7 +83,7 @@ ARG VEGA_DATASETS_VERSION=0.5.0
 #### Other packages
 #
 # jupyterlab/toc - Table of Contents extension for JupyterLab
-#     source: https://github.com/ian-r-rose/jupyterlab-toc
+#   source: https://github.com/ian-r-rose/jupyterlab-toc
 #
 # nbgitpuller - Notebook Git Puller
 #   source: https://github.com/data-8/nbgitpuller
@@ -92,7 +92,7 @@ ARG VEGA_DATASETS_VERSION=0.5.0
 #   source: https://github.com/jupyter-widgets/jupyterlab-sidecar
 #
 # ipythonblocks - colored grids
-#    home: http://www.ipythonblocks.org/
+#   home: http://www.ipythonblocks.org/
 
 RUN conda install --quiet --yes \
         altair=${ALTAIR_VERSION} \
