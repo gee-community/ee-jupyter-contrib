@@ -3,6 +3,33 @@ LABEL base-image="jupyter/scipy-notebook:177037d09156 8/6/2018"
 
 LABEL maintainer="Tyler Erickson <tylere@google.com>"
 
+# Altair - Declarative visualization in Python
+#     docs: https://altair-viz.github.io
+#   source: https://github.com/altair-viz/altair
+#     pkgs: conda search -c conda-forge altair
+ARG ALTAIR_VERSION=2.1.0
+
+# bqplot - Grammar of Graphics-based interactive plotting framework for the Jupyter notebook
+#     docs: https://bqplot.readthedocs.io
+#   source: https://github.com/bloomberg/bqplot
+#     pkgs: conda search -c conda-forge bqplot
+ARG BQPLOT_VERSION=0.11.0
+ARG BQPLOT_NPM_VERSION=0.4.0
+
+# Earth Engine Python API 
+#     home: https://earthengine.google.com
+#     docs: https://developers.google.com/earth-engine
+#   source: https://github.com/google/earthengine-api
+#     pkgs: conda search -c conda-forge earthengine-api
+ARG EARTHENGINE_API_VERSION=0.1.145
+
+# Google API Python Client 
+#     home: http://google.github.io/google-api-python-client/
+#     docs: https://developers.google.com/api-client-library/python/apis/
+#   source: https://github.com/google/google-api-python-client/
+#     pkgs: conda search -c conda-forge google-api-python-client
+ARG GOOGLE_API_PYTHON_VERSION=1.6.7
+
 # ipyleaflet - Leaflet-based interactiving mapping widget
 #     docs: https://ipyleaflet.readthedocs.io
 #   source: https://github.com/jupyter-widgets/ipyleaflet
@@ -13,25 +40,13 @@ ARG IPYLEAFLET_VERSION=0.9.0
 #     docs: https://ipyvolume.readthedocs.io/
 #   source: https://github.com/maartenbreddels/ipyvolume
 #     pkgs: conda search -c conda-forge ipyvolume
-ARG IPYVOLUME_VERSION=0.4.5
+ARG IPYVOLUME_VERSION=0.4.6
+ARG THREEJS_VERSION=1.1.0
 
-# Altair - Declarative visualization in Python
-#     docs: https://altair-viz.github.io
-#   source: https://github.com/altair-viz/altair
-#     pkgs: conda search -c conda-forge altair
-ARG ALTAIR_VERSION=2.1.0
-
-# Vega Datasets - Collection of datasets used in Vega and Vega-Lite examples
-#     docs: http://vega.github.io/vega-datasets
-#   source: https://github.com/vega/vega-datasets
-#     pkgs: conda search -c conda-forge vega_datasets
-ARG VEGA_DATASETS_VERSION=0.5.0
-
-# bqplot - Grammar of Graphics-based interactive plotting framework for the Jupyter notebook
-#     docs: https://bqplot.readthedocs.io
-#   source: https://github.com/bloomberg/bqplot
-#     pkgs: conda search -c conda-forge bqplot
-ARG BQPLOT_VERSION=0.11.0
+# jupyterlab-manager
+#   source: https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
+#     pkgs: npm search @jupyter-widgets/jupyterlab-manager
+ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=0.36.2
 
 # nbdime - Notebook Diff & Merge tool
 #     docs: https://nbdime.readthedocs.io
@@ -59,19 +74,11 @@ ARG PYDRIVE_VERSION=1.3.1
 #     pkgs: conda search -c conda-forge tensorflow
 ARG TENSORFLOW_VERSION=1.8.0
 
-# Earth Engine Python API 
-#     home: https://earthengine.google.com
-#     docs: https://developers.google.com/earth-engine
-#   source: https://github.com/google/earthengine-api
-#     pkgs: conda search -c conda-forge earthengine-api
-ARG EARTHENGINE_API_VERSION=0.1.145
-
-# Google API Python Client 
-#     home: http://google.github.io/google-api-python-client/
-#     docs: https://developers.google.com/api-client-library/python/apis/
-#   source: https://github.com/google/google-api-python-client/
-#     pkgs: conda search -c conda-forge google-api-python-client
-ARG GOOGLE_API_PYTHON_VERSION=1.6.7
+# Vega Datasets - Collection of datasets used in Vega and Vega-Lite examples
+#     docs: http://vega.github.io/vega-datasets
+#   source: https://github.com/vega/vega-datasets
+#     pkgs: conda search -c conda-forge vega_datasets
+ARG VEGA_DATASETS_VERSION=0.5.0
 
 #### Other packages
 #
@@ -104,11 +111,11 @@ RUN conda install --quiet --yes \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # JupyterLab Extensions
     pip install sidecar && \
-    jupyter labextension install --no-build jupyter-leaflet@0.9.0 && \
-    jupyter labextension install --no-build ipyvolume@0.4.6 && \
-    jupyter labextension install --no-build jupyter-threejs@1.1.0 && \
-    jupyter labextension install --no-build @jupyter-widgets/jupyterlab-manager@0.36.1 && \
-    jupyter labextension install --no-build bqplot && \
+    jupyter labextension install --no-build jupyter-leaflet@${IPYLEAFLET_VERSION} && \
+    jupyter labextension install --no-build ipyvolume@${IPYVOLUME_VERSION} && \
+    jupyter labextension install --no-build jupyter-threejs@${THREEJS_VERSION} && \
+    jupyter labextension install --no-build @jupyter-widgets/jupyterlab-manager@${WIDGETS_JUPYTERLAB_MANAGER_VERSION} && \
+    jupyter labextension install --no-build bqplot@${BQPLOT_NPM_VERSION} && \
     jupyter labextension install --no-build @jupyterlab/toc && \
     pip install git+https://github.com/data-8/nbgitpuller \
       && jupyter serverextension enable --py nbgitpuller --sys-prefix && \
