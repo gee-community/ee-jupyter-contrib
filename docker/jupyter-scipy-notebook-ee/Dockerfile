@@ -1,58 +1,59 @@
-FROM jupyter/scipy-notebook:177037d09156
-LABEL base-image="jupyter/scipy-notebook:177037d09156 8/6/2018"
-
+FROM jupyter/scipy-notebook:a6fc0cfbd01b
+LABEL base-image="jupyter/scipy-notebook:a6fc0cfbd01b 11/6/2018"
 LABEL maintainer="Tyler Erickson <tylere@google.com>"
 
 # Altair - Declarative visualization in Python
 #     docs: https://altair-viz.github.io
 #   source: https://github.com/altair-viz/altair
 #     pkgs: conda search -c conda-forge altair
-ARG ALTAIR_VERSION=2.1.0
+ARG ALTAIR_VERSION=2.2.2
 
 # bqplot - Grammar of Graphics-based interactive plotting framework for the Jupyter notebook
 #     docs: https://bqplot.readthedocs.io
 #   source: https://github.com/bloomberg/bqplot
 #     pkgs: conda search -c conda-forge bqplot
-ARG BQPLOT_VERSION=0.11.0
-ARG BQPLOT_NPM_VERSION=0.4.0
+#           npm search bqplot
+ARG BQPLOT_VERSION=0.11.2
+ARG BQPLOT_NPM_VERSION=0.4.3
 
 # Earth Engine Python API 
 #     home: https://earthengine.google.com
 #     docs: https://developers.google.com/earth-engine
 #   source: https://github.com/google/earthengine-api
 #     pkgs: conda search -c conda-forge earthengine-api
-ARG EARTHENGINE_API_VERSION=0.1.145
+ARG EARTHENGINE_API_VERSION=0.1.152
 
 # Google API Python Client 
 #     home: http://google.github.io/google-api-python-client/
 #     docs: https://developers.google.com/api-client-library/python/apis/
 #   source: https://github.com/google/google-api-python-client/
 #     pkgs: conda search -c conda-forge google-api-python-client
-ARG GOOGLE_API_PYTHON_VERSION=1.6.7
+ARG GOOGLE_API_PYTHON_VERSION=1.7.4
 
 # ipyleaflet - Leaflet-based interactiving mapping widget
 #     docs: https://ipyleaflet.readthedocs.io
 #   source: https://github.com/jupyter-widgets/ipyleaflet
 #     pkgs: conda search -c conda-forge ipyleaflet
-ARG IPYLEAFLET_VERSION=0.9.0
+ARG IPYLEAFLET_VERSION=0.9.1
 
 # ipyvolume - 3d plotting in the Jupyter notebook
 #     docs: https://ipyvolume.readthedocs.io/
 #   source: https://github.com/maartenbreddels/ipyvolume
 #     pkgs: conda search -c conda-forge ipyvolume
-ARG IPYVOLUME_VERSION=0.4.6
-ARG THREEJS_VERSION=1.1.0
+#           npm search jupyter-threejs
+ARG IPYVOLUME_VERSION=0.5.1
+ARG THREEJS_VERSION=2.0.3
 
 # jupyterlab-manager
 #   source: https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
 #     pkgs: npm search @jupyter-widgets/jupyterlab-manager
-ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=0.36.2
+ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=0.38.1
 
 # nbdime - Notebook Diff & Merge tool
 #     docs: https://nbdime.readthedocs.io
 #   source: https://github.com/jupyter/nbdime
 #     pkgs: conda search -c conda-forge nbdime
-ARG NBDIME_VERSION=1.0.2
+ARG NBDIME_VERSION=1.0.3
 
 # Palettable - color maps
 #     docs: https://jiffyclub.github.io/palettable
@@ -72,7 +73,7 @@ ARG PYDRIVE_VERSION=1.3.1
 #     docs: https://www.tensorflow.org/api_docs
 #   source: https://github.com/tensorflow/tensorflow
 #     pkgs: conda search -c conda-forge tensorflow
-ARG TENSORFLOW_VERSION=1.8.0
+ARG TENSORFLOW_VERSION=1.11.0
 
 # Vega Datasets - Collection of datasets used in Vega and Vega-Lite examples
 #     docs: http://vega.github.io/vega-datasets
@@ -114,7 +115,6 @@ RUN conda install --quiet --yes \
     jupyter labextension install --no-build jupyter-leaflet@${IPYLEAFLET_VERSION} && \
     jupyter labextension install --no-build ipyvolume@${IPYVOLUME_VERSION} && \
     jupyter labextension install --no-build jupyter-threejs@${THREEJS_VERSION} && \
-    jupyter labextension install --no-build @jupyter-widgets/jupyterlab-manager@${WIDGETS_JUPYTERLAB_MANAGER_VERSION} && \
     jupyter labextension install --no-build bqplot@${BQPLOT_NPM_VERSION} && \
     jupyter labextension install --no-build @jupyterlab/toc && \
     pip install git+https://github.com/data-8/nbgitpuller \
