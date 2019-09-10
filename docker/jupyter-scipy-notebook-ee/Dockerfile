@@ -1,5 +1,5 @@
-FROM jupyter/scipy-notebook:2ce7c06a61a1
-LABEL base-image="jupyter/scipy-notebook:2ce7c06a61a1 10/08/2019"
+FROM jupyter/scipy-notebook:82d1d0bf0867
+LABEL base-image="jupyter/scipy-notebook:82d1d0bf0867 02/09/2019"
 LABEL maintainer="Tyler Erickson <tylere@google.com>"
 
 # Altair - Declarative visualization in Python
@@ -47,7 +47,7 @@ ARG THREEJS_VERSION=2.1.1
 # jupyterlab-manager
 #   source: https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
 #     pkgs: npm search @jupyter-widgets/jupyterlab-manager
-ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=1.0.2
+ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=1.0.4
 
 # nbdime - Notebook Diff & Merge tool
 #     docs: https://nbdime.readthedocs.io
@@ -95,8 +95,7 @@ ARG VEGA_DATASETS_VERSION=0.7.0
 # ipythonblocks - colored grids
 #   home: http://www.ipythonblocks.org/
 
-RUN conda update -n base conda &&\ 
-    conda install --quiet --yes \
+RUN conda install --quiet --yes \
         altair=${ALTAIR_VERSION} \
         bqplot=${BQPLOT_VERSION} \
         earthengine-api=${EARTHENGINE_API_VERSION} \
@@ -108,9 +107,10 @@ RUN conda update -n base conda &&\
         pydrive=${PYDRIVE_VERSION} \
         tensorflow=${TENSORFLOW_VERSION} \
         vega_datasets=${VEGA_DATASETS_VERSION} \
+        jupyterlab=1.1.2 \ # temp upgrade from jupyterlab 1.0.2 to fix UI glitches 
+        numpy=1.16.4 \ # temp downgrade from numpy>1.17 to fix conflicts with tensorflow 1.13.1
       && \
-    conda upgrade --all && \
-    conda build purge-all && \
+    conda clean --all -f -y && \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # JupyterLab Extensions
     pip install sidecar && \
