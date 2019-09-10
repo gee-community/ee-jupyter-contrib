@@ -107,8 +107,8 @@ RUN conda install --quiet --yes \
         pydrive=${PYDRIVE_VERSION} \
         tensorflow=${TENSORFLOW_VERSION} \
         vega_datasets=${VEGA_DATASETS_VERSION} \
-        jupyterlab=1.1.2 \ # temp upgrade from jupyterlab 1.0.2 to fix UI glitches 
-        numpy=1.16.4 \ # temp downgrade from numpy>1.17 to fix conflicts with tensorflow 1.13.1
+        jupyterlab=1.1.2 \
+        numpy=1.16.4 \
       && \
     conda clean --all -f -y && \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
