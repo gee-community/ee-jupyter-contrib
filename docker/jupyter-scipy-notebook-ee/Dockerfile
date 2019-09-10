@@ -13,15 +13,15 @@ ARG ALTAIR_VERSION=3.2.0
 #   source: https://github.com/bloomberg/bqplot
 #     pkgs: conda search -c conda-forge bqplot
 #           npm search bqplot
-ARG BQPLOT_VERSION=0.11.4
-ARG BQPLOT_NPM_VERSION=0.4.7
+ARG BQPLOT_VERSION=0.11.8
+ARG BQPLOT_NPM_VERSION=0.4.8
 
 # Earth Engine Python API 
 #     home: https://earthengine.google.com
 #     docs: https://developers.google.com/earth-engine
 #   source: https://github.com/google/earthengine-api
 #     pkgs: conda search -c conda-forge earthengine-api
-ARG EARTHENGINE_API_VERSION=0.1.192
+ARG EARTHENGINE_API_VERSION=0.1.197
 
 # Google API Python Client 
 #     home: http://google.github.io/google-api-python-client/
@@ -47,7 +47,7 @@ ARG THREEJS_VERSION=2.1.1
 # jupyterlab-manager
 #   source: https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
 #     pkgs: npm search @jupyter-widgets/jupyterlab-manager
-ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=1.0.4
+ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=1.0.2
 
 # nbdime - Notebook Diff & Merge tool
 #     docs: https://nbdime.readthedocs.io
@@ -59,7 +59,7 @@ ARG NBDIME_VERSION=1.1.0
 #     docs: https://jiffyclub.github.io/palettable
 #   source: https://github.com/jiffyclub/palettable
 #     pkgs: conda search -c conda-forge palettable
-ARG PALETTABLE_VERSION=3.2.0
+ARG PALETTABLE_VERSION=3.3.0
 
 # PyDrive - Simplifies many Google Drive API tasks
 #     home: https://pypi.org/project/PyDrive
@@ -95,6 +95,17 @@ ARG VEGA_DATASETS_VERSION=0.7.0
 # ipythonblocks - colored grids
 #   home: http://www.ipythonblocks.org/
 
+#### Temporary bug fixes
+#
+# Update jupyterlab 1.0.2 to 1.1.2 to fix UI glitches
+#   issue reference: https://github.com/jupyterlab/jupyterlab/issues/7178
+ARG JUPYTERLAB_VERSION=1.1.2
+#
+# Downgrade numpy 1.17.2 to 1.16.2 for compatibility with tensorflow 1.13.1
+#   issue reference: https://github.com/tensorflow/tensorflow/issues/30427
+ARG NUMPY_VERSION=1.16.2
+
+
 RUN conda install --quiet --yes \
         altair=${ALTAIR_VERSION} \
         bqplot=${BQPLOT_VERSION} \
@@ -107,8 +118,8 @@ RUN conda install --quiet --yes \
         pydrive=${PYDRIVE_VERSION} \
         tensorflow=${TENSORFLOW_VERSION} \
         vega_datasets=${VEGA_DATASETS_VERSION} \
-        jupyterlab=1.1.2 \
-        numpy=1.16.4 \
+        jupyterlab=${JUPYTERLAB_VERSION} \
+        numpy=${NUMPY_VERSION} \
       && \
     conda clean --all -f -y && \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
