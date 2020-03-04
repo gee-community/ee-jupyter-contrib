@@ -13,17 +13,17 @@ ARG ALTAIR_VERSION=3.2.0
 #   source: https://github.com/bloomberg/bqplot
 #     pkgs: conda search -c conda-forge bqplot
 #           npm search bqplot
-ARG BQPLOT_VERSION=0.11.8
-ARG BQPLOT_NPM_VERSION=0.4.8
+ARG BQPLOT_VERSION=0.12.3
+ARG BQPLOT_NPM_VERSION=0.5.3
 
-# Earth Engine Python API 
+# Earth Engine Python API
 #     home: https://earthengine.google.com
 #     docs: https://developers.google.com/earth-engine
 #   source: https://github.com/google/earthengine-api
 #     pkgs: conda search -c conda-forge earthengine-api
-ARG EARTHENGINE_API_VERSION=0.1.197
+ARG EARTHENGINE_API_VERSION=0.1.213
 
-# Google API Python Client 
+# Google API Python Client
 #     home: http://google.github.io/google-api-python-client/
 #     docs: https://developers.google.com/api-client-library/python/apis/
 #   source: https://github.com/google/google-api-python-client/
@@ -34,7 +34,7 @@ ARG GOOGLE_API_PYTHON_VERSION=1.7.11
 #     docs: https://ipyleaflet.readthedocs.io
 #   source: https://github.com/jupyter-widgets/ipyleaflet
 #     pkgs: conda search -c conda-forge ipyleaflet
-ARG IPYLEAFLET_VERSION=0.11.1
+ARG IPYLEAFLET_VERSION=0.12.3
 
 # ipyvolume - 3d plotting in the Jupyter notebook
 #     docs: https://ipyvolume.readthedocs.io/
@@ -47,7 +47,7 @@ ARG THREEJS_VERSION=2.1.1
 # jupyterlab-manager
 #   source: https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
 #     pkgs: npm search @jupyter-widgets/jupyterlab-manager
-ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=1.0.2
+ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=2.0.0
 
 # nbdime - Notebook Diff & Merge tool
 #     docs: https://nbdime.readthedocs.io
@@ -73,13 +73,13 @@ ARG PYDRIVE_VERSION=1.3.1
 #     docs: https://www.tensorflow.org/api_docs
 #   source: https://github.com/tensorflow/tensorflow
 #     pkgs: conda search -c conda-forge tensorflow
-ARG TENSORFLOW_VERSION=1.13.1
+ARG TENSORFLOW_VERSION=2.0.0
 
 # Vega Datasets - Collection of datasets used in Vega and Vega-Lite examples
 #     docs: http://vega.github.io/vega-datasets
 #   source: https://github.com/vega/vega-datasets
 #     pkgs: conda search -c conda-forge vega_datasets
-ARG VEGA_DATASETS_VERSION=0.7.0
+ARG VEGA_DATASETS_VERSION=0.8.0
 
 #### Other packages
 #
@@ -95,16 +95,11 @@ ARG VEGA_DATASETS_VERSION=0.7.0
 # ipythonblocks - colored grids
 #   home: http://www.ipythonblocks.org/
 
-#### Temporary bug fixes
+#### Temporary bug fix
 #
-# Update jupyterlab 1.0.2 to 1.1.2 to fix UI glitches
+# Update jupyterlab 1.0.2 to 1.2.6 to fix UI glitches
 #   issue reference: https://github.com/jupyterlab/jupyterlab/issues/7178
-ARG JUPYTERLAB_VERSION=1.1.2
-#
-# Downgrade numpy 1.17.2 to 1.16.2 for compatibility with tensorflow 1.13.1
-#   issue reference: https://github.com/tensorflow/tensorflow/issues/30427
-ARG NUMPY_VERSION=1.16.2
-
+ARG JUPYTERLAB_VERSION=1.2.6
 
 RUN conda install --quiet --yes \
         altair=${ALTAIR_VERSION} \
@@ -119,7 +114,6 @@ RUN conda install --quiet --yes \
         tensorflow=${TENSORFLOW_VERSION} \
         vega_datasets=${VEGA_DATASETS_VERSION} \
         jupyterlab=${JUPYTERLAB_VERSION} \
-        numpy=${NUMPY_VERSION} \
       && \
     conda clean --all -f -y && \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
