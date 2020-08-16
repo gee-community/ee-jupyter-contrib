@@ -1,40 +1,33 @@
-FROM jupyter/scipy-notebook:2ce7c06a61a1
-LABEL base-image="jupyter/scipy-notebook:2ce7c06a61a1 10/08/2019"
+FROM jupyter/scipy-notebook:75d7f5e4f76d
+LABEL base-image="jupyter/scipy-notebook:75d7f5e4f76d 2020-07-20"
 LABEL maintainer="Tyler Erickson <tylere@google.com>"
 
 # Altair - Declarative visualization in Python
 #     docs: https://altair-viz.github.io
 #   source: https://github.com/altair-viz/altair
 #     pkgs: conda search -c conda-forge altair
-ARG ALTAIR_VERSION=3.2.0
+ARG ALTAIR_VERSION=4.1.0
 
 # bqplot - Grammar of Graphics-based interactive plotting framework for the Jupyter notebook
 #     docs: https://bqplot.readthedocs.io
 #   source: https://github.com/bloomberg/bqplot
 #     pkgs: conda search -c conda-forge bqplot
 #           npm search bqplot
-ARG BQPLOT_VERSION=0.11.4
-ARG BQPLOT_NPM_VERSION=0.4.7
+ARG BQPLOT_VERSION=0.12.14
+ARG BQPLOT_NPM_VERSION=0.5.14
 
 # Earth Engine Python API 
 #     home: https://earthengine.google.com
 #     docs: https://developers.google.com/earth-engine
 #   source: https://github.com/google/earthengine-api
 #     pkgs: conda search -c conda-forge earthengine-api
-ARG EARTHENGINE_API_VERSION=0.1.192
-
-# Google API Python Client 
-#     home: http://google.github.io/google-api-python-client/
-#     docs: https://developers.google.com/api-client-library/python/apis/
-#   source: https://github.com/google/google-api-python-client/
-#     pkgs: conda search -c conda-forge google-api-python-client
-ARG GOOGLE_API_PYTHON_VERSION=1.7.11
+ARG EARTHENGINE_API_VERSION=0.1.227
 
 # ipyleaflet - Leaflet-based interactiving mapping widget
 #     docs: https://ipyleaflet.readthedocs.io
 #   source: https://github.com/jupyter-widgets/ipyleaflet
 #     pkgs: conda search -c conda-forge ipyleaflet
-ARG IPYLEAFLET_VERSION=0.11.1
+ARG IPYLEAFLET_VERSION=0.13.1
 
 # ipyvolume - 3d plotting in the Jupyter notebook
 #     docs: https://ipyvolume.readthedocs.io/
@@ -47,13 +40,13 @@ ARG THREEJS_VERSION=2.1.1
 # jupyterlab-manager
 #   source: https://github.com/jupyter-widgets/ipywidgets/tree/master/packages/jupyterlab-manager
 #     pkgs: npm search @jupyter-widgets/jupyterlab-manager
-ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=1.0.2
+ARG WIDGETS_JUPYTERLAB_MANAGER_VERSION=2.0.0
 
 # nbdime - Notebook Diff & Merge tool
 #     docs: https://nbdime.readthedocs.io
 #   source: https://github.com/jupyter/nbdime
 #     pkgs: conda search -c conda-forge nbdime
-ARG NBDIME_VERSION=1.1.0
+ARG NBDIME_VERSION=2.0.0
 
 # Palettable - color maps
 #     docs: https://jiffyclub.github.io/palettable
@@ -66,25 +59,22 @@ ARG PALETTABLE_VERSION=3.2.0
 #     docs: https://pythonhosted.org/PyDrive
 #   source: https://github.com/gsuitedevs/PyDrive
 #     pkgs: conda search -c conda-forge pydrive
-ARG PYDRIVE_VERSION=1.3.1
+ARG PYDRIVE_VERSION=3.3.0
 
 # TensorFlow - Computation using data flow graphs for scalable machine learning
 #     home: https://www.tensorflow.org
 #     docs: https://www.tensorflow.org/api_docs
 #   source: https://github.com/tensorflow/tensorflow
 #     pkgs: conda search -c conda-forge tensorflow
-ARG TENSORFLOW_VERSION=1.13.1
+ARG TENSORFLOW_VERSION=2.0.0
 
 # Vega Datasets - Collection of datasets used in Vega and Vega-Lite examples
 #     docs: http://vega.github.io/vega-datasets
 #   source: https://github.com/vega/vega-datasets
 #     pkgs: conda search -c conda-forge vega_datasets
-ARG VEGA_DATASETS_VERSION=0.7.0
+ARG VEGA_DATASETS_VERSION=0.8.0
 
 #### Other packages
-#
-# jupyterlab/toc - Table of Contents extension for JupyterLab
-#   source: https://github.com/ian-r-rose/jupyterlab-toc
 #
 # nbgitpuller - Notebook Git Puller
 #   source: https://github.com/data-8/nbgitpuller
@@ -97,10 +87,10 @@ ARG VEGA_DATASETS_VERSION=0.7.0
 
 RUN conda update -n base conda &&\ 
     conda install --quiet --yes \
+        conda-build \
         altair=${ALTAIR_VERSION} \
         bqplot=${BQPLOT_VERSION} \
         earthengine-api=${EARTHENGINE_API_VERSION} \
-        google-api-python-client=${GOOGLE_API_PYTHON_VERSION} \
         ipyleaflet=${IPYLEAFLET_VERSION} \
         ipyvolume=${IPYVOLUME_VERSION} \
         nbdime=${NBDIME_VERSION} \
@@ -118,9 +108,8 @@ RUN conda update -n base conda &&\
     jupyter labextension install --no-build ipyvolume@${IPYVOLUME_VERSION} && \
     jupyter labextension install --no-build jupyter-threejs@${THREEJS_VERSION} && \
     jupyter labextension install --no-build bqplot@${BQPLOT_NPM_VERSION} && \
-    jupyter labextension install --no-build @jupyterlab/toc && \
-    pip install git+https://github.com/data-8/nbgitpuller \
-      && jupyter serverextension enable --py nbgitpuller --sys-prefix && \
+    jupyter labextension install --no-build @jupyter-widgets/jupyterlab-manager && \
+    jupyter labextension install --no-build @jupyter-widgets/jupyterlab-sidecar && \
     pip install ipythonblocks && \
     export NODE_OPTIONS=--max-old-space-size=16000 && \
     jupyter lab build && \
