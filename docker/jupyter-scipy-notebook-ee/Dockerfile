@@ -52,7 +52,7 @@ ARG NBDIME_VERSION=2.0.0
 #     docs: https://jiffyclub.github.io/palettable
 #   source: https://github.com/jiffyclub/palettable
 #     pkgs: conda search -c conda-forge palettable
-ARG PALETTABLE_VERSION=3.2.0
+ARG PALETTABLE_VERSION=3.3.0
 
 # PyDrive - Simplifies many Google Drive API tasks
 #     home: https://pypi.org/project/PyDrive
@@ -98,9 +98,10 @@ RUN conda update -n base conda &&\
         pydrive=${PYDRIVE_VERSION} \
         tensorflow=${TENSORFLOW_VERSION} \
         vega_datasets=${VEGA_DATASETS_VERSION} \
+        jupyterlab=${JUPYTERLAB_VERSION} \
+        numpy=${NUMPY_VERSION} \
       && \
-    conda upgrade --all && \
-    conda build purge-all && \
+    conda clean --all -f -y && \
     jupyter nbextension enable --py widgetsnbextension --sys-prefix && \
     # JupyterLab Extensions
     pip install sidecar && \
