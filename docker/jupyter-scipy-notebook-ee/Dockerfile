@@ -21,7 +21,7 @@ ARG BQPLOT_NPM_VERSION=0.5.14
 #     docs: https://developers.google.com/earth-engine
 #   source: https://github.com/google/earthengine-api
 #     pkgs: conda search -c conda-forge earthengine-api
-ARG EARTHENGINE_API_VERSION=0.1.227
+ARG EARTHENGINE_API_VERSION=0.1.233
 
 # ipyleaflet - Leaflet-based interactiving mapping widget
 #     docs: https://ipyleaflet.readthedocs.io
