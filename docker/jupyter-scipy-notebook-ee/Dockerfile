@@ -85,7 +85,7 @@ ARG VEGA_DATASETS_VERSION=0.8.0
 # ipythonblocks - colored grids
 #   home: http://www.ipythonblocks.org/
 
-RUN conda update -n base conda &&\ 
+RUN conda update -n base conda && \ 
     conda install --quiet --yes \
         conda-build \
         altair=${ALTAIR_VERSION} \
